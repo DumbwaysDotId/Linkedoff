@@ -1,33 +1,15 @@
 import { StackNavigator } from 'react-navigation';
 
-import { ContactsList, ContactsCreate, ContactsDetail } from '../contacts/screens'
-import Profiles from '../profiles/screens'
+import Profiles from '../profiles/screens' // #1. Import profiles page
 
 const RootNavigator = StackNavigator({
+  //#2. Register profile pages with alias Profiles inside StackNavigator
   Profiles: {
     screen: Profiles,
     navigationOptions: {
       title: 'Profile'
     }
   },
-  ContactsList: {
-    screen: ContactsList,
-    navigationOptions: {
-      title: 'Contacts List'
-    }
-  },
-  ContactsCreate: {
-    screen: ContactsCreate,
-    navigationOptions: {
-      title: 'Create Contact'
-    }
-  },
-  ContactsDetail: {
-    screen: ContactsDetail,
-    navigationOptions: {
-      title: 'Detail Contact'
-    }
-  }
 })
 
 export default RootNavigator
