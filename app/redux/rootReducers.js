@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
 
 import nav from './nav'
-import contactsReducer from '../contacts/reducers'
+import profilesReducer from '../profiles/reducers'
 
 const appReducer = combineReducers({
   nav,
-  contactsReducer
+  profilesReducer
 })
 
 export default appReducer

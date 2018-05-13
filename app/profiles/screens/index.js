@@ -2,36 +2,39 @@ import React, { Component } from 'react'
 import {
   Container, Content, Card,
   CardItem, Body, Text,
-  Thumbnail
+  Thumbnail, Spinner
 } from 'native-base'
 import { View, StyleSheet, Image, Dimensions } from 'react-native'
-import axios from 'axios'
+// import axios from 'axios'
+import { connect } from 'react-redux'
+
+import { getProfile } from '../actions'
 
 const width = Dimensions.get('window').width
 
-export default class Profiles extends Component{
+class Profiles extends Component{
 
   state = {
     data: {}
   }
 
-  allData(){
-    const url = `https://api.backendless.com/221BAB21-F149-D2B2-FF55-B2DD8ECDFE00/31717453-DFFE-7469-FF91-D1EAC0C16700/data/profiles/564DD7D4-4F12-B56A-FFD5-1E4B0E7D9D00?loadRelations=experiences%2Ceducations`
-    axios.get(url).then((result)=>{
-      this.setState({
-        data: result.data
-      })
-    })
-  }
+  // getProfile(){
+  //   const url = `https://api.backendless.com/221BAB21-F149-D2B2-FF55-B2DD8ECDFE00/31717453-DFFE-7469-FF91-D1EAC0C16700/data/profiles/564DD7D4-4F12-B56A-FFD5-1E4B0E7D9D00?loadRelations=experiences%2Ceducations`
+  //   axios.get(url).then((result)=>{
+  //     this.setState({
+  //       data: result.data
+  //     })
+  //   })
+  // }
 
   componentDidMount(){
-    this.allData()
+    this.props.dispatch(getProfile())
   }
 
 
   render(){
     // const {name, position, education, summary, profilePicture, bgPicture} = this.state.data
-    const {name, experiences, educations, summary, profilePicture, bgPicture} = this.state.data
+    const {name, experiences, educations, summary, profilePicture, bgPicture} = this.props.profiles.data
 
     const latestExperience = experiences? experiences[0]: null
     const position = latestExperience? `${latestExperience.position} at ${latestExperience.companyName}`: '-'
@@ -53,26 +56,37 @@ export default class Profiles extends Component{
               source={{uri: profilePicture}}
             />
           </View>
-          <Content style={{marginTop: 120}}>
-            <Card>
-              <CardItem>
-                <Body style={styles.centeredBody}>
-                  <Text style={styles.nameTitle}>{name}</Text>
-                  <Text style={styles.experiences}>{position}</Text>
-                  <Text style={styles.education}>{education}</Text>
 
-                  <Text style={styles.summary}>
-                    {summary}
-                  </Text>
-                </Body>
-              </CardItem>
-            </Card>
-          </Content>
+          {this.props.profiles.isLoading? (
+            <Spinner/>
+          ): (
+            <Content style={{marginTop: 120}}>
+              <Card>
+                <CardItem>
+                  <Body style={styles.centeredBody}>
+                    <Text style={styles.nameTitle}>{name}</Text>
+                    <Text style={styles.experiences}>{position}</Text>
+                    <Text style={styles.education}>{education}</Text>
+
+                    <Text style={styles.summary}>
+                      {summary}
+                    </Text>
+                  </Body>
+                </CardItem>
+              </Card>
+            </Content>
+          )}
         </Container>
     )
   }
 
 }
+
+const mapStateToProps = (state)=>({
+  profiles: state.profilesReducer
+})
+
+export default connect(mapStateToProps)(Profiles)
 
 const styles = StyleSheet.create({
   bgPictureContainer: {
