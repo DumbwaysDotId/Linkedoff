@@ -33,7 +33,6 @@ class Profiles extends Component{
 
 
   render(){
-    // const {name, position, education, summary, profilePicture, bgPicture} = this.state.data
     const {name, experiences, educations, summary, profilePicture, bgPicture} = this.props.profiles.data
 
     const latestExperience = experiences? experiences[0]: null
